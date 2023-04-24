@@ -97,33 +97,39 @@ def simulated_annealing(fitness_func, init_param, init_temp, cool_rate, stopping
     return best_param, best_fitness, best_prediction, param_data, fitness_data, best_param_data, best_fitness_data
 
 
-param, fitness, prediction, param_data, fitness_data, best_param_data, best_fitness_data = simulated_annealing(
-    fitness_function, 1.5, 100, 0.01, 0.01, 10)
-print("Best parameter: ", param)
-print("Best fitness: ", fitness)
-print("Prediction: ", prediction)
+def main():
 
-# Plot the data
-now = datetime.datetime.now()
-# Format the date and time as "DD-MM-YYYY at HH:MM"
-formatted_datetime = now.strftime("%d-%m-%Y at %H-%M-%S")
+    param, fitness, prediction, param_data, fitness_data, best_param_data, best_fitness_data = simulated_annealing(
+        fitness_function, 1.5, 100, 0.01, 0.01, 10)
+    print("Best parameter: ", param)
+    print("Best fitness: ", fitness)
+    print("Prediction: ", prediction)
 
-# create a directory for saving the plots
-plots_dir = f'Simulated Annealing Plots [{formatted_datetime}]'
-os.makedirs(plots_dir, exist_ok=True)
+    # Plot the data
+    now = datetime.datetime.now()
+    # Format the date and time as "DD-MM-YYYY at HH:MM"
+    formatted_datetime = now.strftime("%d-%m-%Y at %H-%M-%S")
 
-fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
-ax1.plot(param_data, label='Current Scale Factor')
-ax1.plot(best_param_data, label='Best Scale Factor')
-ax1.set_xlabel('Iteration')
-ax1.set_ylabel('Scale Factor')
-ax1.legend()
+    # create a directory for saving the plots
+    plots_dir = f'Simulated Annealing Plots [{formatted_datetime}]'
+    os.makedirs(plots_dir, exist_ok=True)
 
-ax2.plot(fitness_data, label='Current Fitness')
-ax2.plot(best_fitness_data, label='Best Fitness')
-ax2.set_xlabel('Iteration')
-ax2.set_ylabel('Fitness')
-ax2.legend()
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
+    ax1.plot(param_data, label='Current Scale Factor')
+    ax1.plot(best_param_data, label='Best Scale Factor')
+    ax1.set_xlabel('Iteration')
+    ax1.set_ylabel('Scale Factor')
+    ax1.legend()
 
-plt.tight_layout()
-plt.savefig(f'{plots_dir}/Best and current fitness and scale factor.png')
+    ax2.plot(fitness_data, label='Current Fitness')
+    ax2.plot(best_fitness_data, label='Best Fitness')
+    ax2.set_xlabel('Iteration')
+    ax2.set_ylabel('Fitness')
+    ax2.legend()
+
+    plt.tight_layout()
+    plt.savefig(f'{plots_dir}/Best and current fitness and scale factor.png')
+
+
+if __name__ == '__main__':
+    main()

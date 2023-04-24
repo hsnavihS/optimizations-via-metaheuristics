@@ -85,8 +85,14 @@ def hill_climbing(fitness_func, step_size, max_iterations):
     return current_param, current_fitness, current_person
 
 
-param, fitness, person = hill_climbing(fitness_function, 0.1, 10)
-print('\n' + '-' * 150)
-print(f"\nBest scale factor: {param:.4f}")
-print(f"Maximum confidence: {fitness:.4f}")
-print(f"Prediction: {person}")
+def main():
+
+    param, fitness, person = hill_climbing(fitness_function, 0.1, 10)
+    print('\n' + '-' * 150)
+    print(f"\nBest scale factor: {param:.4f}")
+    print(f"Maximum confidence: {fitness:.4f}")
+    print(f"Prediction: {person}")
+
+
+if __name__ == '__main__':
+    main()
