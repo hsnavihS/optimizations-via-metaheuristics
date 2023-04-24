@@ -15,7 +15,7 @@ def on_pso_click():
     scaleFactor, confidence, label = particle_swarm_optimization(
         fitness_function, num_particles, num_iterations)
     result_label.config(
-        text=f"Scale Factor, confidence and label is : {scaleFactor, confidence, label}")
+        text=f"Scale factor = {scaleFactor}, confidence = {confidence}, prediction = {label}")
 
 
 def on_ga_click():
@@ -59,6 +59,10 @@ def on_simulated_annealing_click():
         text=f"Scale Factor, confidence and label is : {scaleFactor, confidence, label}")
 
 
+def on_close():
+    root.quit()
+
+
 root = tk.Tk()
 root.title("Choose search algorithm")
 
@@ -69,7 +73,7 @@ pso_button = tk.Button(frame, text="PSO", command=on_pso_click)
 pso_button.grid(row=0, column=0, padx=5, pady=5)
 
 ga_button = tk.Button(frame, text="GA", command=on_ga_click)
-ga_button.grid(row=0, column=1, padx=5, pady=5)
+ga_button.grid(row=0, column=2, padx=5, pady=5)
 
 hill_climbing_button = tk.Button(
     frame, text="Hill Climbing", command=on_hill_climbing_click)
@@ -77,10 +81,14 @@ hill_climbing_button.grid(row=1, column=0, padx=5, pady=5)
 
 simulated_annealing_button = tk.Button(
     frame, text="Simulated Annealing", command=on_simulated_annealing_click)
-simulated_annealing_button.grid(row=1, column=1, padx=5, pady=5)
+simulated_annealing_button.grid(row=1, column=2, padx=5, pady=5)
+
+quit_button = tk.Button(
+    frame, text="Close", command=on_close)
+quit_button.grid(row=2, column=1, padx=5, pady=5)
 
 result_label = tk.Label(frame, text="")
-result_label.grid(row=2, column=0, columnspan=2, pady=10)
+result_label.grid(row=3, column=0, columnspan=2, pady=10)
 
 frame.tkraise()
 root.mainloop()
