@@ -16,10 +16,10 @@ def hill_climbing(fitness_func, step_size, max_iterations):
 
     # choose a random initial parameter value within the range of 1 to 2
     current_param = random.uniform(1, 2)
-    current_fitness = fitness_func(current_param)
+    current_fitness, current_person = fitness_func(current_param)
 
     print(
-        f'Initial scale factor: {current_param:.4f}, initial confidence: {current_fitness:.4f}\n')
+        f'Initial scale factor: {current_param:.4f}, initial confidence: {current_fitness:.4f}, initial prediction: {current_person}\n')
 
     # Lists to store the scale factor and confidence values for plotting
     scale_factors = [current_param]
@@ -44,16 +44,16 @@ def hill_climbing(fitness_func, step_size, max_iterations):
         new_param_add = current_param + step
         new_param_sub = current_param - step
 
-        new_fitness_add = fitness_func(new_param_add)
-        dict[new_fitness_add] = new_param_add
-        new_fitness_sub = fitness_func(new_param_sub)
-        dict[new_fitness_sub] = new_param_sub
+        new_fitness_add, new_person_add = fitness_func(new_param_add)
+        dict[new_fitness_add] = (new_param_add, new_person_add)
+        new_fitness_sub, new_person_sub = fitness_func(new_param_sub)
+        dict[new_fitness_sub] = (new_param_sub, new_person_sub)
 
         new_fitness = max(new_fitness_add, new_fitness_sub)
 
         # if the new parameter value is better, update the current parameter
         if new_fitness > current_fitness:
-            current_param = dict[new_fitness]
+            current_param, current_person = dict[new_fitness]
             current_fitness = new_fitness
 
         # Append the current scale factor and confidence values to the lists
@@ -61,7 +61,7 @@ def hill_climbing(fitness_func, step_size, max_iterations):
         confidences.append(current_fitness)
 
         print(
-            f'Iteration: {i + 1}, current scale factor: {current_param:.4f}, current confidence: {current_fitness:.4f}')
+            f'Iteration: {i + 1}, current scale factor: {current_param:.4f}, current confidence: {current_fitness:.4f}, current prediction: {current_person}')
 
     # plot the scale factor and confidence values
 
@@ -82,9 +82,11 @@ def hill_climbing(fitness_func, step_size, max_iterations):
     plt.savefig(f'{plots_dir}/Scale Factor vs Confidence.png')
 
     # return the best parameter value found
-    return current_param, current_fitness
+    return current_param, current_fitness, current_person
 
 
-param, fitness = hill_climbing(fitness_function, 0.1, 40)
+param, fitness, person = hill_climbing(fitness_function, 0.1, 10)
+print('\n' + '-' * 150)
 print(f"\nBest scale factor: {param:.4f}")
 print(f"Maximum confidence: {fitness:.4f}")
+print(f"Prediction: {person}")

@@ -21,7 +21,9 @@ def genetic_algorithm(population_size, fitness_func, num_generations, mutation_r
     # create an initial population of random parameter values
     population = [random.uniform(1, 2) for _ in range(population_size)]
     print(f'Initial population: {population}')
-    initial_fitness_scores = [fitness_func(param) for param in population]
+    temp = [fitness_func(param) for param in population]
+    initial_fitness_scores = [val[0] for val in temp]
+    predictions = [val[1] for val in temp]
     print(f'Initial fitness scores: {initial_fitness_scores}\n')
     print('-' * 180, '\n')
 
@@ -38,7 +40,9 @@ def genetic_algorithm(population_size, fitness_func, num_generations, mutation_r
     for i in range(num_generations):
         print(f'Generation #{i + 1}:\n')
         # evaluate fitness of each individual in the population
-        fitness_scores = [fitness_func(param) for param in population]
+        temp = [fitness_func(param) for param in population]
+        fitness_scores = [val[0] for val in temp]
+        predictions = [val[1] for val in temp]
         print(f'Population:', population)
         print(f'Fitness scores:', fitness_scores, '\n')
 
@@ -88,13 +92,16 @@ def genetic_algorithm(population_size, fitness_func, num_generations, mutation_r
                         key=lambda i: fitness_scores[i])
     fittest_param = population[fittest_index]
     fittest_fitness = fitness_scores[fittest_index]
-    return fittest_param, fittest_fitness
+    best_prediction = predictions[fittest_index]
+    return fittest_param, fittest_fitness, best_prediction
 
 
 def main():
-    param, fitness = genetic_algorithm(5, fitness_function, 10, 0.5, 2)
+    param, fitness, prediction = genetic_algorithm(
+        4, fitness_function, 10, 0.5, 2)
     print("Best value of scale factor: ", param)
     print("Maximum fitness: ", fitness)
+    print("Prediction: ", prediction)
 
 
 if __name__ == '__main__':

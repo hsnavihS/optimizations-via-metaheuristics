@@ -20,7 +20,7 @@ def simulated_annealing(fitness_func, init_param, init_temp, cool_rate, stopping
 
     # initialize the current state with the initial parameter value
     current_param = init_param
-    current_fitness = fitness_func(current_param)
+    current_fitness, current_prediction = fitness_func(current_param)
 
     # initialize the best state and its fitness to the current state and its fitness
     best_param = current_param
@@ -44,7 +44,7 @@ def simulated_annealing(fitness_func, init_param, init_temp, cool_rate, stopping
 
         # choose a random new parameter value within the range of 1 to 2 and calculate fitness
         new_param = random.uniform(1, 2)
-        new_fitness = fitness_func(new_param)
+        new_fitness, new_prediction = fitness_func(new_param)
 
         # calculate the difference in fitness between the current and new states
         fitness_diff = new_fitness - current_fitness
@@ -55,6 +55,7 @@ def simulated_annealing(fitness_func, init_param, init_temp, cool_rate, stopping
                 f'New state has higher fitness: {new_fitness} > {current_fitness}, accepting new state.')
             current_param = new_param
             current_fitness = new_fitness
+            current_prediction = new_prediction
         # otherwise, accept the new state with a probability that depends on the temperature
         else:
             acceptance_prob = math.exp(fitness_diff / temp)
@@ -65,11 +66,13 @@ def simulated_annealing(fitness_func, init_param, init_temp, cool_rate, stopping
                     f'New state has lower fitness: {new_fitness} < {current_fitness}, still accepting new state with probability {acceptance_prob}.')
                 current_param = new_param
                 current_fitness = new_fitness
+                current_prediction = new_prediction
 
         # update the best state if the current state has higher fitness
         if current_fitness > best_fitness:
             best_param = current_param
             best_fitness = current_fitness
+            best_prediction = current_prediction
 
         # Append data for plotting
         param_data.append(current_param)
@@ -78,9 +81,9 @@ def simulated_annealing(fitness_func, init_param, init_temp, cool_rate, stopping
         best_fitness_data.append(best_fitness)
 
         print(
-            f'Current scale factor: {current_param}, current confidence: {current_fitness}')
+            f'Current scale factor: {current_param}, current confidence: {current_fitness}, current prediction: {current_prediction}')
         print(
-            f'\nBest scale factor: {best_param}, best confidence: {best_fitness}\n')
+            f'\nBest scale factor: {best_param}, best confidence: {best_fitness}, best prediction: {best_prediction}\n')
 
         # stop if the temperature has reached the stopping temperature
         if temp < stopping_temp:
@@ -91,13 +94,14 @@ def simulated_annealing(fitness_func, init_param, init_temp, cool_rate, stopping
         print('-' * 180 + '\n')
 
     # return the best parameter value found
-    return best_param, best_fitness, param_data, fitness_data, best_param_data, best_fitness_data
+    return best_param, best_fitness, best_prediction, param_data, fitness_data, best_param_data, best_fitness_data
 
 
-param, fitness, param_data, fitness_data, best_param_data, best_fitness_data = simulated_annealing(
-    fitness_function, 1.5, 100, 0.01, 0.01, 50)
+param, fitness, prediction, param_data, fitness_data, best_param_data, best_fitness_data = simulated_annealing(
+    fitness_function, 1.5, 100, 0.01, 0.01, 10)
 print("Best parameter: ", param)
 print("Best fitness: ", fitness)
+print("Prediction: ", prediction)
 
 # Plot the data
 now = datetime.datetime.now()

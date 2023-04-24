@@ -20,11 +20,13 @@ def particle_swarm_optimization(fitness_func, num_particles, max_iterations):
     for i in range(num_particles):
         position = random.uniform(1, 2)
         velocity = random.uniform(-0.1, 0.1)
+        best_fitness, prediction = fitness_func(position)
         particle = {
             "position": position,
             "velocity": velocity,
             "best_position": position,
-            "best_fitness": fitness_func(position)
+            "best_fitness": best_fitness,
+            "prediction": prediction
         }
         print(
             f'Particle #{i + 1}: position: {particle["position"]:.4f}, velocity: {particle["velocity"]:.4f}, current fitness: {particle["best_fitness"]:.4f}')
@@ -34,6 +36,7 @@ def particle_swarm_optimization(fitness_func, num_particles, max_iterations):
     # initialize the global best position and its fitness to the first particle's best position and its fitness
     global_best_position = particles[0]["best_position"]
     global_best_fitness = particles[0]["best_fitness"]
+    global_prediction = particles[0]["prediction"]
 
     # lists to store data for plotting
     global_best_positions = []
@@ -67,29 +70,32 @@ def particle_swarm_optimization(fitness_func, num_particles, max_iterations):
             particle["position"] = max(min(particle["position"], 2), 1)
 
             # update the particle's best position and its fitness if its current position has higher fitness
-            current_fitness = fitness_func(particle["position"])
+            current_fitness, current_prediction = fitness_func(
+                particle["position"])
             if current_fitness > particle["best_fitness"]:
                 particle["best_position"] = particle["position"]
                 particle["best_fitness"] = current_fitness
+                particle["prediction"] = current_prediction
 
             # store data for plotting
             particle_positions[j].append(particle["position"])
             particle_fitnesses[j].append(current_fitness)
 
             print(
-                f'Particle #{j + 1}: position: {particle["position"]:.4f}, velocity: {particle["velocity"]:.4f}, current fitness: {current_fitness:.4f}, best_fitness: {particle["best_fitness"]:.4f}')
+                f'Particle #{j + 1}: position: {particle["position"]:.4f}, velocity: {particle["velocity"]:.4f}, current fitness: {current_fitness:.4f}, best_fitness: {particle["best_fitness"]:.4f}, prediction: {particle["prediction"]}')
 
         # update the global best position and its fitness if any particle has higher fitness than it
         for particle in particles:
             if particle["best_fitness"] > global_best_fitness:
                 global_best_position = particle["best_position"]
                 global_best_fitness = particle["best_fitness"]
+                global_prediction = particle["prediction"]
 
         global_best_positions.append(global_best_position)
         global_best_fitnesses.append(global_best_fitness)
 
         print(
-            f'Global best position: {global_best_position:.4f}, global best fitness: {global_best_fitness:.4f}\n')
+            f'Global best position: {global_best_position:.4f}, global best fitness: {global_best_fitness:.4f}, prediction: {global_prediction}\n')
         print('-'*150)
 
     # plot the global best position and its fitness over iterations
@@ -154,7 +160,7 @@ def particle_swarm_optimization(fitness_func, num_particles, max_iterations):
         plt.savefig(f'{plots_dir}/particle #{j + 1}.png')
 
     print('Optimization complete! Plots saved.\n')
-    return global_best_position, global_best_fitness
+    return global_best_position, global_best_fitness, global_prediction
 
 
 def main():
@@ -164,10 +170,11 @@ def main():
     max_iterations = 10
 
     # call the particle_swarm_optimization function with the fitness function and parameters
-    param, fitness = particle_swarm_optimization(
+    param, fitness, prediction = particle_swarm_optimization(
         fitness_function, num_particles, max_iterations)
     print(f"\nBest scale factor: {param:.4f}")
     print(f"Maximum confidence: {fitness:.4f}")
+    print(f"Prediction: {prediction}")
 
 
 if __name__ == '__main__':
