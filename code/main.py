@@ -6,19 +6,11 @@ from simulated_annealing import simulated_annealing
 from genetic_algorithm import genetic_algorithm
 from fitness_function import fitness_function
 
-# def get_parameters(title, count):
-#     params = []
-#     for i in range(count):
-#         param = simpledialog.askfloat(
-#             title, f"Enter parameter {i + 1} (between 1 and 2):", minvalue=1, maxvalue=2)
-#         params.append(param)
-#     return params
-
 
 def on_pso_click():
-    num_particles = simpledialog.askfloat(
+    num_particles = simpledialog.askinteger(
         "Number of particles", f"Enter Number of particles")
-    num_iterations = simpledialog.askfloat(
+    num_iterations = simpledialog.askinteger(
         "Number of iterations", f"Enter Number of iterations")
     scaleFactor, confidence, label = particle_swarm_optimization(
         fitness_function, num_particles, num_iterations)
@@ -27,13 +19,13 @@ def on_pso_click():
 
 
 def on_ga_click():
-    population_size = simpledialog.askfloat(
+    population_size = simpledialog.askinteger(
         "Population Size", f"Enter Population size")
-    num_generations = simpledialog.askfloat(
+    num_generations = simpledialog.askinteger(
         "Number of generations", f"Enter number of generations")
     mutation_rate = simpledialog.askfloat(
         "Mutation rate", f"Enter Mutation rate")
-    mode = simpledialog.askfloat("Mode", f"Enter Mode (either 1 or 2)")
+    mode = simpledialog.askinteger("Mode", f"Enter Mode (either 1 or 2)")
     scaleFactor, confidence, label = genetic_algorithm(
         population_size, fitness_function, num_generations, mutation_rate, mode)
     result_label.config(
@@ -43,7 +35,7 @@ def on_ga_click():
 def on_hill_climbing_click():
     step_size = simpledialog.askfloat(
         "Step size", f"Enter step size")
-    num_iterations = simpledialog.askfloat(
+    num_iterations = simpledialog.askinteger(
         "Number of iterations", f"Enter Number of iterations")
     scaleFactor, confidence, label = hill_climbing(
         fitness_function, step_size, num_iterations)
@@ -54,12 +46,12 @@ def on_hill_climbing_click():
 def on_simulated_annealing_click():
     init_param = simpledialog.askfloat(
         "Initial parameter", f"Enter initial parameter")
-    init_temp = simpledialog.askfloat(
+    init_temp = simpledialog.askinteger(
         "Initial Temperature", f"Enter Initial Temperature")
     cool_rate = simpledialog.askfloat(
         "Cool rate", f"Enter Cool rate")
     stop_temp = simpledialog.askfloat("Stop temp", f"Enter stop temp")
-    num_iterations = simpledialog.askfloat(
+    num_iterations = simpledialog.askinteger(
         "Number of iterations", f"Enter Number of iterations")
     scaleFactor, confidence, label = simulated_annealing(
         fitness_function, init_param, init_temp, cool_rate, stop_temp, num_iterations)
